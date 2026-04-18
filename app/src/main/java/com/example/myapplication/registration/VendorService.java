@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.myapplication.DBhelper;
 import com.example.myapplication.Homepage;
 import com.example.myapplication.R;
+import com.example.myapplication.VendorHomepage;
 import com.example.myapplication.users.User;
 import com.example.myapplication.users.Vendor;
 
@@ -42,7 +44,7 @@ public class VendorService extends AppCompatActivity {
     EditText homeRepair_price;
     Switch pestControl_switch;
     EditText pestControl_price;
-
+    DBhelper db = new DBhelper(this);
     Button register;
     HashMap<String, Double> services;
 
@@ -92,36 +94,55 @@ public class VendorService extends AppCompatActivity {
         makeVisible(homeRepair_switch,homeRepair_price );
         makeVisible(pestControl_switch,pestControl_price);
 
+        findViewById(R.id.vendor_serviceSelect_back).setOnClickListener(v -> finish());
         register.setOnClickListener(v ->
         {
-            DBhelper db = new DBhelper(this);
 
-            addService(services, appliances_switch.getText().toString(), appliances_switch, appliances_price);
-            addService(services, electrical_switch.getText().toString(), electrical_switch, electrical_price);
-            addService(services, plumbing_switch.getText().toString(), plumbing_switch, plumbing_price);
-            addService(services, homeCleaning_switch.getText().toString(), homeCleaning_switch, homeCleaning_price);
-            addService(services, tutoring_switch.getText().toString(), tutoring_switch, tutoring_price);
-            addService(services, packaging_switch.getText().toString(), packaging_switch, packaging_price);
-            addService(services, computerRepair_switch.getText().toString(), computerRepair_switch, computerRepair_price);
-            addService(services, homeRepair_switch.getText().toString(), homeRepair_switch, homeRepair_price);
-            addService(services, pestControl_switch.getText().toString(), pestControl_switch, pestControl_price);
-            Vendor newVendor = new Vendor(user.getEmail(), user.getPassword(), user.getphoneNumber(), user.getAddress(), user.getFirstName(), services);
+            services.clear();
 
-            db.addUser(user);
-            db.addVendor(newVendor);
-            Intent intent = new Intent(VendorService.this, Homepage.class);
-            intent.putExtra("vendor", newVendor);
-            startActivity(intent);
+            boolean notEmpty = addService(services, appliances_switch.getText().toString(), appliances_switch, appliances_price);
+            notEmpty &= addService(services, electrical_switch.getText().toString(), electrical_switch, electrical_price);
+            notEmpty &= addService(services, plumbing_switch.getText().toString(), plumbing_switch, plumbing_price);
+            notEmpty &= addService(services, homeCleaning_switch.getText().toString(), homeCleaning_switch, homeCleaning_price);
+            notEmpty &= addService(services, tutoring_switch.getText().toString(), tutoring_switch, tutoring_price);
+            notEmpty &= addService(services, packaging_switch.getText().toString(), packaging_switch, packaging_price);
+            notEmpty &= addService(services, computerRepair_switch.getText().toString(), computerRepair_switch, computerRepair_price);
+            notEmpty &= addService(services, homeRepair_switch.getText().toString(), homeRepair_switch, homeRepair_price);
+            notEmpty &= addService(services, pestControl_switch.getText().toString(), pestControl_switch, pestControl_price);
+
+            if(services.isEmpty()){Toast.makeText(this, "Must select a service!", Toast.LENGTH_LONG).show(); return;}
+            if(!notEmpty)
+            {
+                Toast.makeText(this, "Invalid Input!", Toast.LENGTH_LONG).show();
+            }
+            else {
+                //put the user in the data base so we can call it later to get the id of the new vendor
+                db.addUser(user);
+                //this is object but i still gotta put the id into it
+                Vendor newVendor = new Vendor(user.getEmail(), user.getPassword(), user.getphoneNumber(), user.getAddress(), user.getFirstName(), services);
+                //this is where we set the id >:)
+                newVendor.setUserID(db.getUser(user.getEmail(),user.getPassword()).getUserID());
+
+
+                db.addVendor(newVendor);
+                Intent intent = new Intent(VendorService.this, VendorHomepage.class);
+                intent.putExtra("vendor", newVendor);
+                intent.putExtra("id", newVendor.getUserID());
+                startActivity(intent);
+            }
         });
     }
 
-    public void addService(Map<String, Double> services, String service, Switch holder, EditText price_text) {
+    public boolean addService(Map<String, Double> services, String service, Switch holder, EditText price_text) {
         if (holder.isChecked()) {
             String text = price_text.getText().toString().trim();
             if (!text.isEmpty()) {
                 services.put(service, Double.parseDouble(text));
+                return true;
             }
+            return false;
         }
+        return true;
     }
 
     public void makeVisible(Switch holder, EditText price_text) {

@@ -64,7 +64,7 @@ public class VendorRegistration extends AppCompatActivity {
         attachValidation(vendor_address_TI,vendor_address_l,User::validateNumber,"Invalid Address");
 
         Button register = findViewById(R.id.register_next_vendor);
-
+        findViewById(R.id.vendor_register_back).setOnClickListener(v -> finish());
         register.setOnClickListener(v ->
         {
             boolean validFirstName = finalValidation(vendor_name_TI, vendor_name_l, User::validateName, "Business Name");

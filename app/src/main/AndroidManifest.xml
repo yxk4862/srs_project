@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".VendorRequests"
+            android:exported="false" />
+        <activity
+            android:name=".MyOrders"
+            android:exported="false" />
+        <activity
+            android:name=".VendorAccountPage"
+            android:exported="false" />
+        <activity
+            android:name=".CustomerAccount"
+            android:exported="false" />
+        <activity
             android:name=".VendorHomepage"
             android:exported="false" />
         <activity

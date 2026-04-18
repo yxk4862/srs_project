@@ -1,0 +1,79 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/order_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- SERVICE -->
+        <TextView
+            android:id="@+id/service_name_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plumbing Repair"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginBottom="10dp" />
+
+        <!-- VENDOR INFO -->
+        <TextView
+            android:id="@+id/vendor_or_customer_name_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vendor: QuickFix Plumbing"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/vendor_or_customer_email_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email: vendor@email.com"
+            android:textSize="14sp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- DATE -->
+        <TextView
+            android:id="@+id/service_date_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date: 2026-04-10 14:30"
+            android:textSize="14sp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- ADDRESS -->
+        <TextView
+            android:id="@+id/service_address_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address: 123 Main St, City"
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp" />
+
+        <!-- STATUS (UNCHANGED STYLE) -->
+        <TextView
+            android:id="@+id/request_status_myOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            android:textColor="@android:color/holo_orange_dark"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

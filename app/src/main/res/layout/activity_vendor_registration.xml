@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".registration.VendorRegistration">
 
+    <ImageButton
+        android:id="@+id/vendor_register_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/left_arrow"
+        android:contentDescription="Back"
+        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
     <TextView
         android:id="@+id/create_accountV"
         android:layout_width="wrap_content"
@@ -18,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/vendor_register_back" />
 
     <TextView
         android:id="@+id/below_create_accountV"

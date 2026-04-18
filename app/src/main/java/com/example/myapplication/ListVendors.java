@@ -35,12 +35,13 @@ public class ListVendors extends AppCompatActivity {
 
         String service = getIntent().getStringExtra("service");
         User customer = getIntent().getParcelableExtra("customer");
+        customer.setUserID(getIntent().getLongExtra("customerId", -1));
 
         DBhelper db = new DBhelper(this);
         List<Vendor> vendors = db.getVendorsByService(service);
 
         LinearLayout container = findViewById(R.id.list_vendors_linear);
-
+        findViewById(R.id.list_vendors_back).setOnClickListener(v -> finish());
         LayoutInflater inflater = LayoutInflater.from(this);
 
         for (Vendor v : vendors) {
@@ -59,14 +60,18 @@ public class ListVendors extends AppCompatActivity {
             Double priceValue = v.getServices().get(service);
             price.setText(priceValue != null ? "$" + priceValue + " ": "N/A");
 
-            rating.setRating(4.0f);
-            image.setImageResource(R.drawable.ic_launcher_foreground);
+            String vendor_rating = db.getAverageRatingFormatted((int)v.getUserID());
+
+            rating.setRating(Float.parseFloat(vendor_rating));
+
 
             card.setOnClickListener(view -> {
                 Intent intent = new Intent(ListVendors.this, VendorInformation.class);
                 intent.putExtra("vendor", v); // passing the vendor
+                intent.putExtra("id", v.getUserID());
                 intent.putExtra("customer", customer);
-                intent.putExtra("service", service);// passing the customer
+                intent.putExtra("service", service);
+                intent.putExtra("customerId", customer.getUserID());// passing the customer
                 startActivity(intent);
             });
 

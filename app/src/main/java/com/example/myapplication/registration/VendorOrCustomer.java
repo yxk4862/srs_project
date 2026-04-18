@@ -3,6 +3,7 @@ package com.example.myapplication.registration;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,5 +40,8 @@ public class VendorOrCustomer extends AppCompatActivity {
                 Intent intent = new Intent(VendorOrCustomer.this, CustomerRegistration.class);
                 startActivity(intent);
         });
+
+        findViewById(R.id.vendor_or_customer_back).setOnClickListener(v -> finish());
+
     }
 }

@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+
 import com.example.myapplication.users.User;
 import com.example.myapplication.users.Vendor;
 
@@ -18,7 +20,7 @@ import java.util.List;
 
 public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you must extend it.
 {
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 10;
 
     public DBhelper(Context context) //db helper constructor
     {
@@ -73,7 +75,7 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
         StringBuilder ratings = new StringBuilder();
         ratings.append("CREATE TABLE ratings (");
         ratings.append("rating_id INTEGER PRIMARY KEY AUTOINCREMENT,");
-        ratings.append("stars INTEGER NOT NULL,");
+        ratings.append("stars REAL NOT NULL,");
         ratings.append("comment TEXT,");
         ratings.append("rating_date TEXT,");
         ratings.append("customer_id INTEGER,");
@@ -108,6 +110,21 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
                 // 🟡 More pending (for UI variety)
                 "('cleaning', '2026-04-12', 50.0, 0, 3, 1, 0, '123 Main St'), " +
                 "('electrical', '2026-04-13', 60.0, 0, 3, 2, 0, '456 Oak St')");
+        db.execSQL("INSERT INTO ratings (stars, comment, rating_date, customer_id, vendor_id) VALUES " +
+                "(5.0, 'Amazing service, super fast!', '2026-04-10', 1, 3), " +
+                "(4.5, 'Very good work, would recommend.', '2026-04-09', 2, 3), " +
+                "(4.0, 'Fixed my appliance quickly.', '2026-04-08', 1, 4), " +
+                "(3.5, 'Decent service but a bit slow.', '2026-04-07', 2, 4), " +
+                "(5.0, 'Excellent experience overall!', '2026-04-06', 1, 3), " +
+                "(2.5, 'Not great, had to call again.', '2026-04-05', 2, 4)");
+        db.execSQL("INSERT INTO ratings (stars, comment, rating_date, customer_id, vendor_id) VALUES " +
+                "(5.0, 'Absolutely perfect service. Fixed everything in one visit!', '2026-04-11', 1, 3), " +
+                "(4.5, 'Really professional and quick response time.', '2026-04-10', 2, 3), " +
+                "(4.0, 'Good work overall, slight delay but job was solid.', '2026-04-09', 1, 3), " +
+                "(5.0, 'Best repair experience I’ve had so far!', '2026-04-08', 2, 3), " +
+                "(4.8, 'Very knowledgeable and friendly.', '2026-04-07', 1, 3), " +
+                "(4.2, 'Solved the issue quickly, price was fair.', '2026-04-06', 2, 3), " +
+                "(5.0, 'Highly recommend Mike! Excellent service.', '2026-04-05', 1, 3)");
     }
 
     /*Still unsure about this method, seems to be just about making certain types of changes
@@ -118,6 +135,7 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
         db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS vendors");
         db.execSQL("DROP TABLE IF EXISTS service_requests");
+        db.execSQL("DROP TABLE IF EXISTS ratings");
         onCreate(db);
     }
 
@@ -284,6 +302,7 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
         return address;
     }
 
+    //vendor service stuff
     public List<Vendor> getVendorsByService(String service) {
         List<Vendor> vendors = new ArrayList<>();
 
@@ -323,6 +342,32 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
         return vendors;
     }
 
+    public HashMap<String, Double> getVendorServices(int userId) {
+
+        HashMap<String, Double> services = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT service, service_price FROM vendors WHERE user_id = ?",
+                new String[]{String.valueOf(userId)}
+        );
+
+        while (cursor.moveToNext()) {
+
+            String service = cursor.getString(
+                    cursor.getColumnIndexOrThrow("service")
+            );
+
+            double price = cursor.getDouble(
+                    cursor.getColumnIndexOrThrow("service_price")
+            );
+
+            services.put(service, price);
+        }
+
+        cursor.close();
+        return services;
+    }
     public Vendor getVendorFromUser(User user) {
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -422,7 +467,7 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
                     accepted
             );
 
-            request.setServiceRequestID(cursor.getColumnIndexOrThrow("service_request_id"));
+            request.setServiceRequestID(cursor.getInt(cursor.getColumnIndexOrThrow("service_request_id")));
             list.add(request);
         }
 
@@ -452,5 +497,83 @@ public class DBhelper extends SQLiteOpenHelper //Sqlite must be a class and you 
                 "service_request_id = ?",
                 new String[]{String.valueOf(requestId)}
         );
+    }
+
+    //All the ratings stuff
+    public List<Rating> getRatingsForVendor(int vendorId) {
+
+        List<Rating> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM ratings WHERE vendor_id = ?",
+                new String[]{String.valueOf(vendorId)}
+        );
+
+        while (cursor.moveToNext()) {
+
+            int ratingId = cursor.getInt(cursor.getColumnIndexOrThrow("rating_id"));
+            double stars = cursor.getDouble(cursor.getColumnIndexOrThrow("stars"));
+            String comment = cursor.getString(cursor.getColumnIndexOrThrow("comment"));
+            String date = cursor.getString(cursor.getColumnIndexOrThrow("rating_date"));
+
+            int customerId = cursor.getInt(cursor.getColumnIndexOrThrow("customer_id"));
+
+            User customer = getUser(
+                    getEmailByUserId(customerId),
+                    getPasswordByUserId(customerId)
+            );
+
+            Rating rating = new Rating(
+                    stars,
+                    comment,
+                    date,
+                    customer,
+                    null // vendor optional here
+            );
+
+            rating.setRatingID(ratingId);
+            list.add(rating);
+        }
+
+        cursor.close();
+        return list;
+    }
+
+    public long addRating(Rating rating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("stars", rating.getStars());
+        values.put("comment", rating.getComment());
+        values.put("rating_date", rating.getDate());
+        values.put("vendor_id", rating.getVendor().getUserID());
+        values.put("customer_id", rating.getCustomer().getUserID());
+
+        long id = db.insert("ratings", null, values);
+
+        db.close();
+        return id;
+    }
+
+    public String getAverageRatingFormatted(int vendorId) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT AVG(stars) FROM ratings WHERE vendor_id = ?",
+                new String[]{String.valueOf(vendorId)}
+        );
+
+        double average = 0.0;
+
+        if (cursor.moveToFirst() && !cursor.isNull(0)) {
+            average = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return String.format("%.1f", average);
     }
 }

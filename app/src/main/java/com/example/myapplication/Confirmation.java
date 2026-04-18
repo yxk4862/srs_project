@@ -26,11 +26,13 @@ public class Confirmation extends AppCompatActivity {
         });
 
         User customer = getIntent().getParcelableExtra("customer");
+        customer.setUserID(getIntent().getLongExtra("customerId", -1));
         Button home = findViewById(R.id.btnHome);
         home.setOnClickListener(v -> {
             //Toast.makeText(this, serviceName + " clicked!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Confirmation.this, Homepage.class);
             intent.putExtra("user", customer);// pass whole object
+            intent.putExtra("id", customer.getUserID());
             startActivity(intent);
         });
 

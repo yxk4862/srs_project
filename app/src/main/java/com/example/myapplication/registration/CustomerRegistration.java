@@ -70,6 +70,7 @@ public class CustomerRegistration extends AppCompatActivity {
         attachValidation(phoneNumber_EditText,phoneNumber_layout,User::validateNumber,"Invalid Phone Number");
 
         Button register = findViewById(R.id.customer_register_button);
+        findViewById(R.id.customer_register_back).setOnClickListener(v -> finish());
 
         register.setOnClickListener(v ->
         {

@@ -25,7 +25,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                app:srcCompat="@drawable/homepageimage" />
+                app:srcCompat="@drawable/customersicon" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -41,7 +41,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="appliances" />
+                android:text="Appliances"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/electrical_button"
@@ -49,7 +50,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Electrical" />
+                android:text="Electrical"
+                android:textSize="25sp" />
 
             <Button
                 android:id="@+id/plumbing_button"
@@ -57,7 +59,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Plumbing" />
+                android:text="Plumbing"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/homeCleaning_button"
@@ -65,7 +68,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Home Cleaning" />
+                android:text="Home Cleaning"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/tutoring_button"
@@ -73,7 +77,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Tutoring" />
+                android:text="Tutoring"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/packaging_button"
@@ -81,7 +86,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Packaging and Moving" />
+                android:text="Packaging and Moving"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/computerRepair_button"
@@ -89,7 +95,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Computer Repair"/>
+                android:text="Computer Repair"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/homeRepair_button"
@@ -97,7 +104,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Home Repair and Painting" />
+                android:text="Home Repair and Painting"
+                android:textSize="25sp"/>
 
             <Button
                 android:id="@+id/pestControl_button"
@@ -105,7 +113,8 @@
                 android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#609DE9"
-                android:text="Pest Control" />
+                android:text="Pest Control"
+                android:textSize="25sp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

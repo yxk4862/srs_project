@@ -27,6 +27,7 @@ import java.util.function.Function;
 
 public class Payment extends AppCompatActivity {
 
+    DBhelper db = new DBhelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,9 @@ public class Payment extends AppCompatActivity {
         });
 
         Vendor vendor = getIntent().getParcelableExtra("vendor");
+        vendor.setUserID(getIntent().getLongExtra("vendorId", -1));
         User customer = getIntent().getParcelableExtra("customer");
+        customer.setUserID(getIntent().getLongExtra("customerId", -1));
         String service= getIntent().getStringExtra("service");
 
         TextInputLayout card_number_layout = findViewById(R.id.card_number_layout); TextInputEditText card_number_EditText = findViewById(R.id.card_number_editText);
@@ -95,6 +98,8 @@ public class Payment extends AppCompatActivity {
 
             datePicker.show();
         });
+
+        findViewById(R.id.payment_back).setOnClickListener(v -> finish());
         Button submit = findViewById(R.id.btnPay);
 
         submit.setOnClickListener(v ->
@@ -123,8 +128,12 @@ public class Payment extends AppCompatActivity {
                 address.append(zip_EditText.getText().toString());
 
                 ServiceRequest ServiceRequest = new ServiceRequest(service,date,price,false,vendor,customer,address.toString(),false);
+                //adding the request I just made into the database
+                db.addServiceRequest(ServiceRequest);
                 Intent intent = new Intent(Payment.this, Confirmation.class);
                 intent.putExtra("customer", customer);
+                intent.putExtra("customerId", customer.getUserID());
+
                 startActivity(intent);
             }
         });

@@ -56,14 +56,17 @@ public class MainActivity extends AppCompatActivity {
                     Vendor loginVendor = db.getVendorFromUser(user);
                     //Toast.makeText(this, "User ID: " + loginVendor.getUserID(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MainActivity.this, VendorHomepage.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra("vendor", loginVendor);
                     intent.putExtra("id", loginVendor.getUserID());
                     startActivity(intent);
                 }else {
 
-                    /*Intent intent = new Intent(MainActivity.this, Homepage.class);
+                    Intent intent = new Intent(MainActivity.this, Homepage.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra("user", user);
-                    startActivity(intent);*/
+                    intent.putExtra("id", user.getUserID());
+                    startActivity(intent);
                 }
             } else {
                 // login failed

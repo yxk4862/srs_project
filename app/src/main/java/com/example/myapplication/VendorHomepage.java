@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myapplication.registration.VendorOrCustomer;
 import com.example.myapplication.users.Vendor;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -77,5 +80,33 @@ public class VendorHomepage extends AppCompatActivity {
             });
             if(!r.isAccepted()){container.addView(card);}
         }
+
+        BottomNavigationView homepage_bottom = findViewById(R.id.vendor_bottom_nav);
+        BottomNavHelper.setupVendorBottomNav(this,homepage_bottom,logged_vendor,id,R.id.home);
+        /*homepage_bottom.setOnItemSelectedListener(item -> {
+            int item_id = item.getItemId();
+
+            if (item_id == R.id.home) {
+                Intent intent = new Intent(this, VendorHomepage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                return true;
+            } else if (item_id == R.id.requests_icon) {
+                Intent intent = new Intent(this, VendorRequests.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra("vendor", logged_vendor);
+                intent.putExtra("id", id);
+                startActivity(intent);
+                return true;
+            } else if (item_id == R.id.user_icon) {
+                Intent intent = new Intent(this, VendorAccountPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra("vendor", logged_vendor);
+                intent.putExtra("id", id);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });*/
     }
 }

@@ -6,8 +6,10 @@
     android:layout_height="match_parent">
 
     <!-- 🔙 Back Arrow -->
+
+    <!-- Main Content -->
     <ImageButton
-        android:id="@+id/btnBack"
+        android:id="@+id/payment_back"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="start|top"
@@ -17,7 +19,6 @@
         android:padding="8dp"
         app:srcCompat="@drawable/left_arrow" />
 
-    <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
