@@ -86,7 +86,7 @@ public class VendorRegistration extends AppCompatActivity {
             {
                 User activeUser = new User(vendor_name_TI.getText().toString(),null,
                         vendor_email_TI.getText().toString(), vendor_password_TI.getText().toString(),
-                        2,vendor_phone_TI.getText().toString(),vendor_phone_TI.getText().toString());
+                        2,vendor_phone_TI.getText().toString(),vendor_address_TI.getText().toString());
                 Intent intent = new Intent(VendorRegistration.this, VendorService.class);
                 intent.putExtra("user", activeUser);
                 intent.putExtra("color", color_EditText.getText().toString().trim());
